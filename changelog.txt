@@ -1,0 +1,16 @@
+v1.2
+- Modified fuel weight calculation to better adhere to payload mass.  It will no longer overshoot the total fuel required.  In most cases the difference was minor, but in certain edge cases (e.g. a 1-ton probe with a Mainsail) it would pile on a ridiculous amount of fuel.
+- Added Ion support (3 different modes: Gigantor, 8 OX-4, or No solar panels)
+- Added custom engine support
+
+v1.1
+- Removed the Max Load, Max dV, and Max Payload columns.  They weren't really useful to designing your ship and they cluttered the interface.
+- You can now sort columns by clicking the column header
+- If an engine cannot meet the requirements, it now displays a dash rather than nonsensical negative numbers
+
+v1.0
+- Now has a GUI!
+- Fixed a bug in calculations resulting in incorrect numbers
+
+v0.5
+- First public release.
