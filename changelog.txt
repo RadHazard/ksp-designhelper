@@ -1,3 +1,6 @@
+v1.3
+- I honestly can't remember the differences between this and 1.2.  There aren't many, if any at all.
+
 v1.2
 - Modified fuel weight calculation to better adhere to payload mass.  It will no longer overshoot the total fuel required.  In most cases the difference was minor, but in certain edge cases (e.g. a 1-ton probe with a Mainsail) it would pile on a ridiculous amount of fuel.
 - Added Ion support (3 different modes: Gigantor, 8 OX-4, or No solar panels)
