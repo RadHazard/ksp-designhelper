@@ -1,6 +1,5 @@
 package com.radhazard.ksp.data;
 
-
 /**
  * Different fuel types
  */
@@ -12,7 +11,7 @@ public enum Fuel {
 	public final String name;
 	public final double density;
 	
-	Fuel(String name, double density) {
+	private Fuel(String name, double density) {
 		this.name = name;
 		this.density = density;
 	}
@@ -20,4 +19,4 @@ public enum Fuel {
 	public String toString() {
 		return name;
 	}
-};
+}

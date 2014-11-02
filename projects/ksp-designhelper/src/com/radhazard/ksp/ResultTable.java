@@ -28,25 +28,32 @@ public class ResultTable extends JPanel {
 	public ResultTable(Engine[] engines) {
 		this.engines = engines.clone();
 		
+		// Create the model
 		this.resultTableModel = new ResultTableModel(this.engines.length);
 		this.resultTable = new JTable(resultTableModel);
 
+		// Set column widths and resize to false
 		for (int i = 0; i < resultTable.getColumnCount(); i++) {
 			TableColumn column = resultTable.getColumnModel().getColumn(i);
 			column.setPreferredWidth(prefWidths[i]);
 			column.setResizable(false);
 		}
 		
+		// Set engine names
 		for (int i = 0; i < resultTable.getRowCount(); i++) {
 			resultTableModel.setValueAt(this.engines[i].name, i, 0);
 		}
+		
+		// Add row sorter
 		RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(resultTableModel);
 		this.resultTable.setRowSorter(sorter);
 		
+		// Add custom table renderer
 		ResultTableCellRenderer resultRenderer = new ResultTableCellRenderer(); 
 		this.resultTable.setDefaultRenderer(Integer.class, resultRenderer);
 		this.resultTable.setDefaultRenderer(Double.class, resultRenderer);
 		
+		// Add
 		this.add(this.resultTable.getTableHeader(), BorderLayout.PAGE_START);
 		this.add(this.resultTable);
 	}

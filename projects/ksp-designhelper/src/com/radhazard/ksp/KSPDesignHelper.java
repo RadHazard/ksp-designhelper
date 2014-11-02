@@ -181,12 +181,11 @@ public class KSPDesignHelper extends JPanel implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		// Calculate
+		// Parse the custom engine data
 		double custMass;
 		double custThrust;
 		double custISP;
 		Fuel custFuel = (Fuel) customFuelBox.getSelectedItem();
-		
 		try {
 			custMass = Double.parseDouble(customMassField.getText());
 			custThrust = Double.parseDouble(customThrustField.getText());
@@ -197,6 +196,7 @@ public class KSPDesignHelper extends JPanel implements ActionListener {
 			custISP = 0;
 		}
 		
+		// Update the result table
 		try {
 			double minTMR = Double.parseDouble(TWField.getText()) * g0;
 			double min_dV = Double.parseDouble(dVField.getText());
@@ -206,12 +206,12 @@ public class KSPDesignHelper extends JPanel implements ActionListener {
 			for(int i = 0; i < engines.length; i++) {
 				if (engines[i] == Engine.CUSTOM) {
 					if (custMass >= 0) {
-						resultTable.setResult(Engine.CUSTOM, Solver.recalculate(minTMR, min_dV, payloadMass, custMass, custThrust, custISP, custFuel));
+						resultTable.setResult(Engine.CUSTOM, RocketSolver.recalculate(minTMR, min_dV, payloadMass, custMass, custThrust, custISP, custFuel));
 					} else {
 						resultTable.setResult(Engine.CUSTOM, null);
 					}
 				} else {
-					resultTable.setResult(engines[i], Solver.recalculate(minTMR, min_dV, payloadMass, engines[i]));
+					resultTable.setResult(engines[i], RocketSolver.recalculate(minTMR, min_dV, payloadMass, engines[i]));
 				}
 			}
 		} catch (NumberFormatException e) {

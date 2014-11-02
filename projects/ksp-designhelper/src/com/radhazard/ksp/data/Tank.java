@@ -18,7 +18,7 @@ public enum Tank {
 	public final double wetMass;
 	public final double massRatio;
 	
-	Tank(Fuel fuel, double capacity, double dryMass) {
+	private Tank(Fuel fuel, double capacity, double dryMass) {
 		this.fuel = fuel;
 		this.capacity = capacity;
 		this.dryMass = dryMass;

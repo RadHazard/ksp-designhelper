@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Miscellaneous data about the fuel tanks 
+ * Class for holding miscellaneous data about fuel tanks and engines 
  */
 public class Data {
 	private static HashMap<Fuel, Tank[]> fuelMap = new HashMap<>();

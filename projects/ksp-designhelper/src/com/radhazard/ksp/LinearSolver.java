@@ -1,7 +1,13 @@
 package com.radhazard.ksp;
+
 import org.apache.commons.math3.linear.RealMatrix;
 
-
+/**
+ * A basic linear optimization solver
+ * 
+ * @author Rad Hazard
+ *
+ */
 public class LinearSolver {
 	/**
 	 * A simplex solver for linear optimization problems.
@@ -46,7 +52,6 @@ public class LinearSolver {
 			}
 			
 			if (problem) { // PANIC
-				//JOptionPane.showMessageDialog(this, "A bad thing happened during Simplex.", "Error", JOptionPane.WARNING_MESSAGE);
 				System.err.println("A bad thing happened during Simplex");
 				return null;
 			}

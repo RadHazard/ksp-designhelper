@@ -8,7 +8,7 @@ import com.radhazard.ksp.data.Engine;
 import com.radhazard.ksp.data.Fuel;
 import com.radhazard.ksp.data.Tank;
 
-public class Solver {
+public class RocketSolver {
 	private static final double g0 = 9.82;	// Dem kerbals and their silly constants.  This is the exact value so don't "fix" it
 	
 	/**
@@ -251,7 +251,6 @@ public class Solver {
 		}
 		System.out.println("}");
 		*/
-				
 		
 		return result;
 	}

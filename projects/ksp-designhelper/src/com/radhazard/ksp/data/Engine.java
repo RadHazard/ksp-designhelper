@@ -25,7 +25,7 @@ public enum Engine {
 	public final Fuel fuel;
 	public final double tmr;
 	
-	Engine(String name, double mass, double thrust, double isp, Fuel fuel) {
+	private Engine(String name, double mass, double thrust, double isp, Fuel fuel) {
 		this.name = name;
 		this.mass = mass;
 		this.thrust = thrust;

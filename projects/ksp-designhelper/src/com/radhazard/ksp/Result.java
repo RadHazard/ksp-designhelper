@@ -1,7 +1,7 @@
 package com.radhazard.ksp;
 
 /**
- * A class that holds result data
+ * A class that holds result data from the solver
  */
 public class Result {
 	private int enginesRequired;
