@@ -1,6 +1,5 @@
 package com.radhazard.ksp.data;
 
-import java.util.Vector;
 
 /**
  * Different fuel types

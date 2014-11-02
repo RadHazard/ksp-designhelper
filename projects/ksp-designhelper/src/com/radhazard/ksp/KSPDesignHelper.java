@@ -34,7 +34,6 @@ import javax.swing.border.TitledBorder;
 
 import com.radhazard.ksp.data.Engine;
 import com.radhazard.ksp.data.Fuel;
-import com.radhazard.ksp.data.Tank;
 
 public class KSPDesignHelper extends JPanel implements ActionListener {
 
@@ -68,7 +67,7 @@ public class KSPDesignHelper extends JPanel implements ActionListener {
 	private JTextField customMassField;
 	private JTextField customThrustField;
 	private JTextField customISPField;
-	private JComboBox customFuelBox;
+	private JComboBox<Fuel> customFuelBox;
 	
 	public KSPDesignHelper() {
 		super(new GridBagLayout());
@@ -107,7 +106,7 @@ public class KSPDesignHelper extends JPanel implements ActionListener {
 		customISPField.addActionListener(this);
 		
 		customFuelLabel = new JLabel("Fuel");
-		customFuelBox = new JComboBox(Fuel.values());
+		customFuelBox = new JComboBox<Fuel>(Fuel.values());
 		customFuelBox.addActionListener(this);
 		
 		customPanel.add(customMassLabel);
