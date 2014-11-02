@@ -1,9 +1,12 @@
 package com.radhazard.ksp;
 
-import java.util.Vector;
-
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
+
+import com.radhazard.ksp.data.Data;
+import com.radhazard.ksp.data.Engine;
+import com.radhazard.ksp.data.Fuel;
+import com.radhazard.ksp.data.Tank;
 
 public class Solver {
 	private static final double g0 = 9.82;	// Dem kerbals and their silly constants.  This is the exact value so don't "fix" it
@@ -39,14 +42,14 @@ public class Solver {
 		double fuelMass = maxLoad + engineMass - dryMass;			// Mass of the fuel is equal to total mass minus dry mass
 		
 		// TODO Modify this for MILPSolver
-		double tankMassRatio = engineFuel.fuelTanks.get(0).massRatio;
+		double tankMassRatio = Data.getTanksByFuel(engineFuel)[0].massRatio;	// Just pick the first tank for now
 		double tankMass = fuelMass / tankMassRatio; 
 		double maxPayload = dryMass - (engineMass + tankMass);		// Maximum payload is the dry mass minus engines and empty fuel tanks.
 		
 		int enginesRequired = (int)Math.ceil(payloadMass / maxPayload);
 		
 		if (enginesRequired > 0) { // sanity check
-			int[] numTanks = MILPSolver(payloadMass, engineMass, engineThrust, minMassRatio, minTMR, engineFuel.fuelTanks);
+			int[] numTanks = MILPSolver(payloadMass, engineMass, engineThrust, minMassRatio, minTMR, Data.getTanksByFuel(engineFuel));
 			if (numTanks == null) {
 				// TODO handle this more gracefully
 				throw new RuntimeException("MILPSolver died (RIP MILPSolver)");
@@ -73,7 +76,7 @@ public class Solver {
 	 * Unrelated to either dimunitive adolescent equines in the possessive or matriarchs of suitable mating quality
 	 * @return 
 	 */
-	public static int[] MILPSolver(double payloadMass, double engineMass, double engineThrust, double dmr, double twr, Vector<Tank> fuelTanks) {
+	public static int[] MILPSolver(double payloadMass, double engineMass, double engineThrust, double dmr, double twr, Tank[] tanks) {
 		/*
 		 * Constants:
 		 * mp - payload mass	me - engine mass	wm1..n - fuel tank wet mass		dm1..n - fuel tank dry mass		DMR - Desired Mass Ratio	TWR - Thrust/Weight ratio
@@ -97,7 +100,7 @@ public class Solver {
 		
 		System.out.println("= SOLVING MILP ="); // TODO Debug
 		
-		RealMatrix canonical = new Array2DRowRealMatrix(3, fuelTanks.size() + 5);
+		RealMatrix canonical = new Array2DRowRealMatrix(3, tanks.length + 5);
 		
 		// Set first row and engine var column
 		double sm1[][] = {{1, -engineMass},
@@ -106,8 +109,8 @@ public class Solver {
 		canonical.setSubMatrix(sm1, 0, 0);
 		
 		// Set each fuel tank column
-		for (int i = 0; i < fuelTanks.size(); i++) {
-			double col[] = {-fuelTanks.get(i).wetMass, fuelTanks.get(i).wetMass - dmr * fuelTanks.get(i).dryMass, -twr * fuelTanks.get(i).wetMass};
+		for (int i = 0; i < tanks.length; i++) {
+			double col[] = {-tanks[i].wetMass, tanks[i].wetMass - dmr * tanks[i].dryMass, -twr * tanks[i].wetMass};
 			canonical.setColumn(2 + i, col);
 		}
 		
@@ -115,7 +118,7 @@ public class Solver {
 		double sm2[][] = {{0, 0, 0},
 						  {1, 0, (dmr - 1) * payloadMass},
 						  {0, 1, twr * payloadMass}};
-		canonical.setSubMatrix(sm2, 0, 2 + fuelTanks.size());
+		canonical.setSubMatrix(sm2, 0, 2 + tanks.length);
 		
 		System.out.println(" Simplex: " + (canonical.getRowDimension() - 1) + " constraints"); // TODO Debug
 		
@@ -139,7 +142,7 @@ public class Solver {
 		boolean integral = true; 
 		for(int i = 1; i < canonical.getRowDimension(); i++) {
 			double result = canonical.getEntry(i, canonical.getColumnDimension() - 1);
-			if (Double.compare(Math.floor(result), result) != 0 && solutionVars[i - 1] <= fuelTanks.size()) {
+			if (Double.compare(Math.floor(result), result) != 0 && solutionVars[i - 1] <= tanks.length) {
 				integral = false;
 				break;
 			}
@@ -152,13 +155,14 @@ public class Solver {
 		
 		int row = 0;	// Which row to build the cut out of
 		while (!integral){
-			// TODO Debug 
+			// TODO == Debug == 
 			System.out.print("  Result: \n{ ");
 			for(int i = 1; i < canonical.getRowDimension(); i++) {
 				System.out.print(solutionVars[i - 1] + ":" + canonical.getEntry(i, canonical.getColumnDimension() - 1) + "\t");
 			}
 			System.out.println("}");
-			System.out.print(" Not Integral! New Cut: \n{ "); // TODO Debug
+			System.out.print(" Not Integral! New Cut: \n{ ");
+			// TODO == End Debug ==
 			
 			RealMatrix newCanon = new Array2DRowRealMatrix(canonical.getRowDimension() + 1, canonical.getColumnDimension() + 1);
 			newCanon.setSubMatrix(canonical.getData(), 0, 0);
@@ -184,11 +188,12 @@ public class Solver {
 			
 			newCanon.setRow(newCanon.getRowDimension() - 1, cut);
 			
-			// TODO Debug
+			// TODO == Debug ==
 			for (int i = 0; i < cut.length; i++) {
 				System.out.print(cut[i] + "\t");
 			}
 			System.out.println("}");
+			// TODO == End Debug ==
 			
 			canonical = newCanon;
 			
@@ -202,7 +207,7 @@ public class Solver {
 			integral = true; 
 			for(int i = 1; i < canonical.getRowDimension(); i++) {
 				double result = canonical.getEntry(i, canonical.getColumnDimension() - 1);
-				if (Double.compare(Math.floor(result), result) != 0 && solutionVars[i - 1] <= fuelTanks.size()) {
+				if (Double.compare(Math.floor(result), result) != 0 && solutionVars[i - 1] <= tanks.length) {
 					integral = false;
 					break;
 				}
@@ -230,7 +235,7 @@ public class Solver {
 		System.out.println("}");
 		
 		
-		int[] result = new int[fuelTanks.size()];
+		int[] result = new int[tanks.length];
 		for(int i = 0; i < solutionVars.length; i++) {
 			// Discard slack variables
 			if(solutionVars[i] < result.length) {

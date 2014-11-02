@@ -1,9 +1,9 @@
-package com.radhazard.ksp;
+package com.radhazard.ksp.data;
 
 /**
  * Various fuel tanks
  */
-enum Tank {
+public enum Tank {
 	OscarB(Fuel.LFO, 12.735, 0.015),
 	Round8(Fuel.LFO, 22.2, 0.025),
 	FL_T100(Fuel.LFO, 100, 0.0625),
@@ -12,11 +12,11 @@ enum Tank {
 	Xenon(Fuel.Xenon, 700, 0.05),
 	XenonRadial(Fuel.Xenon, 400, 0.03);
 	
-	final Fuel fuel;
-	final double capacity;
-	final double dryMass;
-	final double wetMass;
-	final double massRatio;
+	public final Fuel fuel;
+	public final double capacity;
+	public final double dryMass;
+	public final double wetMass;
+	public final double massRatio;
 	
 	Tank(Fuel fuel, double capacity, double dryMass) {
 		this.fuel = fuel;

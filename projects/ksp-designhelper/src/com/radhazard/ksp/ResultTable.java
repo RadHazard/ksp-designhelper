@@ -12,6 +12,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import com.radhazard.ksp.data.Engine;
+
 public class ResultTable extends JPanel {
 	private static final long serialVersionUID = 1L;
 

@@ -32,6 +32,10 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import com.radhazard.ksp.data.Engine;
+import com.radhazard.ksp.data.Fuel;
+import com.radhazard.ksp.data.Tank;
+
 public class KSPDesignHelper extends JPanel implements ActionListener {
 
 	/**
@@ -155,13 +159,6 @@ public class KSPDesignHelper extends JPanel implements ActionListener {
 		c.gridx = 0; c.gridy = 6;
 		c.gridwidth = 2;
 		add(customPanel, c);
-		
-		// Initialize Fuel tanks
-		Tank[] tanks = Tank.values();
-		
-		for(int i = 0; i < tanks.length; i++) {
-			tanks[i].fuel.addTank(tanks[i]);
-		}
 	}
 
 	public static void main(String[] args) {	

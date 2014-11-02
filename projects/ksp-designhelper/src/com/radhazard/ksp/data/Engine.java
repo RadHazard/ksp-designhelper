@@ -1,6 +1,6 @@
-package com.radhazard.ksp;
+package com.radhazard.ksp.data;
 
-enum Engine {
+public enum Engine {
 	LV_1("LV-1/LV-1R", 0.03, 1.5, 290, Fuel.LFO),
 	R24_77("24-77", 0.09, 20, 300, Fuel.LFO),
 	R48_7S("48-7S", 0.1, 20, 350, Fuel.LFO),
@@ -18,12 +18,12 @@ enum Engine {
 	PB_ION("PB-ION", 0.25, 0.5, 4200, Fuel.Xenon),
 	CUSTOM("Custom", 0, 0, 0, Fuel.LFO);
 	
-	final String name;
-	final double mass;
-	final double thrust;
-	final double isp;
-	final Fuel fuel;
-	final double tmr;
+	public final String name;
+	public final double mass;
+	public final double thrust;
+	public final double isp;
+	public final Fuel fuel;
+	public final double tmr;
 	
 	Engine(String name, double mass, double thrust, double isp, Fuel fuel) {
 		this.name = name;
