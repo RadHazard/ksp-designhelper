@@ -7,6 +7,8 @@ import com.radhazard.ksp.data.Data;
 import com.radhazard.ksp.data.Engine;
 import com.radhazard.ksp.data.Fuel;
 import com.radhazard.ksp.data.Tank;
+import com.radhazard.math.LinearSolution;
+import com.radhazard.math.LinearSolver;
 
 public class RocketSolver {
 	private static final double g0 = 9.82;	// Dem kerbals and their silly constants.  This is the exact value so don't "fix" it
@@ -135,8 +137,8 @@ public class RocketSolver {
 		// Simplex solution of relaxed LP;
 		int[] solutionVars;
 		LinearSolution simplexSol = LinearSolver.Simplex(canonical);
-		canonical = simplexSol.finalMatrix;
-		solutionVars = simplexSol.solutionVarList;
+		canonical = simplexSol.getFinalMatrix();
+		solutionVars = simplexSol.getSolutionVarList();
 		
 		// Check for integrality of the variables (ignore the slack variables)
 		boolean integral = true; 
@@ -200,8 +202,8 @@ public class RocketSolver {
 			System.out.println(" Dual Simplex: " + (canonical.getRowDimension() - 1) + " constraints"); // TODO Debug
 			
 			simplexSol = LinearSolver.DualSimplex(canonical);
-			canonical = simplexSol.finalMatrix;
-			solutionVars = simplexSol.solutionVarList;
+			canonical = simplexSol.getFinalMatrix();
+			solutionVars = simplexSol.getSolutionVarList();
 			
 			// Check for integrality of the variables (ignore the slack variables)
 			integral = true; 
